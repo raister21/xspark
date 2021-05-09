@@ -54,7 +54,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_isItPressed);
     return SafeArea(child: Scaffold(body: _registerView()));
   }
 

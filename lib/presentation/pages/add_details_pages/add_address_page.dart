@@ -13,6 +13,7 @@ class AddAddressPage extends StatefulWidget {
 class _AddAddressPageState extends State<AddAddressPage> {
   // Initializing variables
   final _formKey = GlobalKey<FormState>();
+  final _warehouseFormKey = GlobalKey<FormState>();
   final Validator _validator = Validator();
   final double defaultPads = 20.0;
   final int animationTime = 500;
@@ -99,7 +100,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
             onChanged: (value) => {
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(WarehouseAddressChanged(warehouseAddress: value))
-              // BlocProvider.of<UserdetailsBloc>(context).add(ue)
             },
           ),
         );
@@ -140,7 +140,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           child: Text(value),
         );
       }).toList(),
-      validator: (value) => value ?? "Zone not selected",
+      validator: (value) => value != null ? null : "Zone not selected",
       onChanged: (value) {
         BlocProvider.of<UserdetailsBloc>(context)
             .add(WarehouseZoneChanged(warehouseZone: value));
@@ -356,12 +356,20 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     value: 1,
                     groupValue: _buisnessGroup,
                     onChanged: (changed) => {
-                          _buisnessSetAsSame(changed),
-                          BlocProvider.of<UserdetailsBloc>(context).add(
-                              BuisnessDetailsSameAsWarehouseClicked(
-                                  buisnessAddress: state.warehouseAddress,
-                                  buisnessZone: state.warehouseZone,
-                                  buisnessProvince: state.warehouseProvince))
+                          if (state.warehouseAddress != null &&
+                              state.warehouseZone != null &&
+                              state.warehouseProvince != null)
+                            {
+                              _buisnessSetAsSame(changed),
+                              BlocProvider.of<UserdetailsBloc>(context).add(
+                                  BuisnessDetailsSameAsWarehouseClicked(
+                                      buisnessAddress: state.warehouseAddress,
+                                      buisnessZone: state.warehouseZone,
+                                      buisnessProvince:
+                                          state.warehouseProvince))
+                            }
+                          else
+                            {_warehouseFormKey.currentState.validate()}
                         }),
               );
             },
@@ -399,12 +407,19 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     value: 1,
                     groupValue: _returnGroup,
                     onChanged: (changed) => {
-                          _returnSetAsSame(changed),
-                          BlocProvider.of<UserdetailsBloc>(context).add(
-                              ReturnDetailsSameAsWarehouseClicked(
-                                  returnAddress: state.warehouseAddress,
-                                  returnZone: state.warehouseZone,
-                                  returnProvince: state.warehouseProvince))
+                          if (state.warehouseAddress != null &&
+                              state.warehouseZone != null &&
+                              state.warehouseProvince != null)
+                            {
+                              _returnSetAsSame(changed),
+                              BlocProvider.of<UserdetailsBloc>(context).add(
+                                  ReturnDetailsSameAsWarehouseClicked(
+                                      returnAddress: state.warehouseAddress,
+                                      returnZone: state.warehouseZone,
+                                      returnProvince: state.warehouseProvince))
+                            }
+                          else
+                            {_warehouseFormKey.currentState.validate()}
                         }),
               );
             },
@@ -426,8 +441,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Widget _warehouseAddressBlock() {
-    return Column(
-      children: [_addressInput(), _zoneInput(), _provinceInput()],
+    return Form(
+      key: _warehouseFormKey,
+      child: Column(
+        children: [_addressInput(), _zoneInput(), _provinceInput()],
+      ),
     );
   }
 
