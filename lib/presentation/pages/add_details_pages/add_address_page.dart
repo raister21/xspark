@@ -14,6 +14,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
   // Initializing variables
   final _formKey = GlobalKey<FormState>();
   final _warehouseFormKey = GlobalKey<FormState>();
+  final _warehouseAddressKey = GlobalKey<FormFieldState>();
+  final _warehouseProvinceKey = GlobalKey<FormFieldState>();
   final Validator _validator = Validator();
   final double defaultPads = 20.0;
   final int animationTime = 500;
@@ -89,6 +91,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           padding:
               EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
           child: TextFormField(
+            key: _warehouseAddressKey,
             maxLength: 16,
             decoration: InputDecoration(
                 counterText: "",
@@ -98,6 +101,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             validator: (value) =>
                 _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
+              _warehouseAddressKey.currentState.validate(),
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(WarehouseAddressChanged(warehouseAddress: value))
             },
@@ -152,6 +156,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
       child: TextFormField(
+        key: _warehouseProvinceKey,
         maxLength: 16,
         decoration: InputDecoration(
             counterText: "",
@@ -161,6 +166,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
         validator: (value) =>
             _validator.isValidName(value) ? null : 'Province is too short',
         onChanged: (value) => {
+          _warehouseProvinceKey.currentState.validate(),
           BlocProvider.of<UserdetailsBloc>(context).add(
             (WarehouseProvinceChanged(warehouseProvince: value)),
           )
@@ -479,7 +485,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
       child: TextButton(
         onPressed: () {
           if (_formKey.currentState.validate()) {
-            widget.movePageForward();
+            if (_warehouseFormKey.currentState.validate()) {
+              widget.movePageForward();
+            }
           }
         },
         style: ButtonStyle(
