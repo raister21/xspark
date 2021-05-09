@@ -15,7 +15,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
   final _formKey = GlobalKey<FormState>();
   final _warehouseFormKey = GlobalKey<FormState>();
   final _warehouseAddressKey = GlobalKey<FormFieldState>();
+  final _warehouseZoneKey = GlobalKey<FormFieldState>();
   final _warehouseProvinceKey = GlobalKey<FormFieldState>();
+  final _buisnessAddressKey = GlobalKey<FormFieldState>();
+  final _buisnessZoneKey = GlobalKey<FormFieldState>();
+  final _buisnessProvinceKey = GlobalKey<FormFieldState>();
+  final _returnAddressKey = GlobalKey<FormFieldState>();
+  final _returnZoneKey = GlobalKey<FormFieldState>();
+  final _returnProvinceKey = GlobalKey<FormFieldState>();
   final Validator _validator = Validator();
   final double defaultPads = 20.0;
   final int animationTime = 500;
@@ -113,6 +120,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   Widget _zoneInput() {
     return DropdownButtonFormField<String>(
+      key: _warehouseZoneKey,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(
@@ -146,6 +154,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       }).toList(),
       validator: (value) => value != null ? null : "Zone not selected",
       onChanged: (value) {
+        _warehouseZoneKey.currentState.validate();
         BlocProvider.of<UserdetailsBloc>(context)
             .add(WarehouseZoneChanged(warehouseZone: value));
       },
@@ -182,6 +191,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           padding:
               EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
           child: TextFormField(
+            key: _buisnessAddressKey,
             maxLength: 16,
             decoration: InputDecoration(
                 counterText: "",
@@ -191,6 +201,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             validator: (value) =>
                 _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
+              _buisnessAddressKey.currentState.validate(),
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(BuisnessAddressChanged(buisnessAddress: value))
             },
@@ -202,6 +213,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   Widget _buisnessZoneInput() {
     return DropdownButtonFormField<String>(
+      key: _buisnessZoneKey,
       decoration: InputDecoration(
         border: OutlineInputBorder(
             borderSide: BorderSide(
@@ -234,6 +246,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       }).toList(),
       validator: (value) => value ?? "Zone not selected",
       onChanged: (value) {
+        _buisnessZoneKey.currentState.validate();
         BlocProvider.of<UserdetailsBloc>(context)
             .add(BuisnessZoneChanged(buisnessZone: value));
       },
@@ -244,6 +257,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
       child: TextFormField(
+        key: _buisnessProvinceKey,
         maxLength: 16,
         decoration: InputDecoration(
             counterText: "",
@@ -253,6 +267,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
         validator: (value) =>
             _validator.isValidName(value) ? null : 'Zone is too short',
         onChanged: (value) => {
+          _buisnessProvinceKey.currentState.validate(),
           BlocProvider.of<UserdetailsBloc>(context)
               .add(BuisnessProvinceChanged(buisnessProvince: value))
         },
@@ -267,6 +282,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           padding:
               EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
           child: TextFormField(
+            key: _returnAddressKey,
             maxLength: 16,
             decoration: InputDecoration(
                 counterText: "",
@@ -276,6 +292,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             validator: (value) =>
                 _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
+              _returnAddressKey.currentState.validate(),
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(ReturnAddressChanged(returnAddress: value))
             },
@@ -287,6 +304,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   Widget _returnZoneInput() {
     return DropdownButtonFormField<String>(
+      key: _returnZoneKey,
       decoration: InputDecoration(
         border: OutlineInputBorder(
             borderSide: BorderSide(
@@ -319,6 +337,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       }).toList(),
       validator: (value) => value ?? "Zone not selected",
       onChanged: (value) {
+        _returnZoneKey.currentState.validate();
         BlocProvider.of<UserdetailsBloc>(context)
             .add(ReturnZoneChanged(returnZone: value));
       },
@@ -329,6 +348,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(0, defaultSmallPads, 0, defaultSmallPads),
       child: TextFormField(
+        key: _returnProvinceKey,
         maxLength: 16,
         decoration: InputDecoration(
             counterText: "",
@@ -338,6 +358,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
         validator: (value) =>
             _validator.isValidName(value) ? null : 'Province is too short',
         onChanged: (value) => {
+          _returnProvinceKey.currentState.validate(),
           BlocProvider.of<UserdetailsBloc>(context)
               .add(ReturnProvinceChanged(returnProvince: value))
         },
