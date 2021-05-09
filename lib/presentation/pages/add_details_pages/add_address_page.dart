@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:xspark/data/userdetails/address_model.dart';
+import 'package:xspark/data/customClasses/validator.dart';
 import 'package:xspark/data/userdetails/bloc/userdetails_bloc.dart';
 
 class AddAddressPage extends StatefulWidget {
@@ -12,6 +12,8 @@ class AddAddressPage extends StatefulWidget {
 
 class _AddAddressPageState extends State<AddAddressPage> {
   // Initializing variables
+  final _formKey = GlobalKey<FormState>();
+  final Validator _validator = Validator();
   final double defaultPads = 20.0;
   final int animationTime = 500;
   final double defaultSmallPads = 16.0;
@@ -45,20 +47,21 @@ class _AddAddressPageState extends State<AddAddressPage> {
       child: Container(
         padding: EdgeInsets.fromLTRB(defaultPads, defaultPads, defaultPads, 0),
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            _displayMessage(message: "Warehouse address"),
-            _addressInput(),
-            _zoneInput(),
-            _provinceInput(),
-            _displayMessage(message: "Buisness Address"),
-            _buisnessSameAsWareHouseRadioButton(),
-            _buissnessAddressBlock(),
-            _displayMessage(message: "Return Address"),
-            _returnSameAsWareHouseRadioButton(),
-            _returnAddressBlock(),
-            _proceedButton()
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              _displayMessage(message: "Warehouse address"),
+              _warehouseAddressBlock(),
+              _displayMessage(message: "Buisness Address"),
+              _buisnessSameAsWareHouseRadioButton(),
+              _buissnessAddressBlock(),
+              _displayMessage(message: "Return Address"),
+              _returnSameAsWareHouseRadioButton(),
+              _returnAddressBlock(),
+              _proceedButton()
+            ],
+          ),
         ),
       ),
     );
@@ -91,9 +94,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 hintText: 'Address'),
+            validator: (value) =>
+                _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(WarehouseAddressChanged(warehouseAddress: value))
+              // BlocProvider.of<UserdetailsBloc>(context).add(ue)
             },
           ),
         );
@@ -102,47 +108,43 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Widget _zoneInput() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          shape: BoxShape.rectangle,
-          border: Border.all(width: 1.0, color: Colors.grey)),
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Colors.amber, width: 5, style: BorderStyle.solid)),
-          enabledBorder: InputBorder.none,
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.grey, width: 5, style: BorderStyle.solid),
         ),
-        dropdownColor: Color.fromARGB(255, 244, 244, 244),
-        hint: Text('Zone'),
-        items: <String>[
-          'Mechi',
-          'Koshi',
-          'Sagarmatha',
-          'Janakpur',
-          'Bagmati',
-          'Narayani',
-          'Gandaki',
-          'Lumbini',
-          'Dhawalagiri',
-          'Rapti',
-          'Karnali',
-          'Bheri',
-          'Seti',
-          'Mahakali'
-        ].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (value) {
-          BlocProvider.of<UserdetailsBloc>(context)
-              .add(WarehouseZoneChanged(warehouseZone: value));
-        },
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.grey)),
       ),
+      dropdownColor: Color.fromARGB(255, 244, 244, 244),
+      hint: Text('Zone'),
+      items: <String>[
+        'Mechi',
+        'Koshi',
+        'Sagarmatha',
+        'Janakpur',
+        'Bagmati',
+        'Narayani',
+        'Gandaki',
+        'Lumbini',
+        'Dhawalagiri',
+        'Rapti',
+        'Karnali',
+        'Bheri',
+        'Seti',
+        'Mahakali'
+      ].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      validator: (value) => value ?? "Zone not selected",
+      onChanged: (value) {
+        BlocProvider.of<UserdetailsBloc>(context)
+            .add(WarehouseZoneChanged(warehouseZone: value));
+      },
     );
   }
 
@@ -156,9 +158,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5.0))),
             hintText: 'Province'),
+        validator: (value) =>
+            _validator.isValidName(value) ? null : 'Province is too short',
         onChanged: (value) => {
-          BlocProvider.of<UserdetailsBloc>(context)
-              .add(WarehouseProvinceChanged(warehouseProvince: value))
+          BlocProvider.of<UserdetailsBloc>(context).add(
+            (WarehouseProvinceChanged(warehouseProvince: value)),
+          )
         },
       ),
     );
@@ -177,6 +182,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 hintText: 'Address'),
+            validator: (value) =>
+                _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(BuisnessAddressChanged(buisnessAddress: value))
@@ -188,47 +195,42 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Widget _buisnessZoneInput() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          shape: BoxShape.rectangle,
-          border: Border.all(width: 1.0, color: Colors.grey)),
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Colors.amber, width: 5, style: BorderStyle.solid)),
-          enabledBorder: InputBorder.none,
-        ),
-        dropdownColor: Color.fromARGB(255, 244, 244, 244),
-        hint: Text('Zone'),
-        items: <String>[
-          'Mechi',
-          'Koshi',
-          'Sagarmatha',
-          'Janakpur',
-          'Bagmati',
-          'Narayani',
-          'Gandaki',
-          'Lumbini',
-          'Dhawalagiri',
-          'Rapti',
-          'Karnali',
-          'Bheri',
-          'Seti',
-          'Mahakali'
-        ].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (value) {
-          BlocProvider.of<UserdetailsBloc>(context)
-              .add(BuisnessZoneChanged(buisnessZone: value));
-        },
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.amber, width: 5, style: BorderStyle.solid)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.grey)),
       ),
+      dropdownColor: Color.fromARGB(255, 244, 244, 244),
+      hint: Text('Zone'),
+      items: <String>[
+        'Mechi',
+        'Koshi',
+        'Sagarmatha',
+        'Janakpur',
+        'Bagmati',
+        'Narayani',
+        'Gandaki',
+        'Lumbini',
+        'Dhawalagiri',
+        'Rapti',
+        'Karnali',
+        'Bheri',
+        'Seti',
+        'Mahakali'
+      ].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      validator: (value) => value ?? "Zone not selected",
+      onChanged: (value) {
+        BlocProvider.of<UserdetailsBloc>(context)
+            .add(BuisnessZoneChanged(buisnessZone: value));
+      },
     );
   }
 
@@ -242,6 +244,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5.0))),
             hintText: 'Province'),
+        validator: (value) =>
+            _validator.isValidName(value) ? null : 'Zone is too short',
         onChanged: (value) => {
           BlocProvider.of<UserdetailsBloc>(context)
               .add(BuisnessProvinceChanged(buisnessProvince: value))
@@ -263,6 +267,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 hintText: 'Address'),
+            validator: (value) =>
+                _validator.isValidName(value) ? null : 'Address is too short',
             onChanged: (value) => {
               BlocProvider.of<UserdetailsBloc>(context)
                   .add(ReturnAddressChanged(returnAddress: value))
@@ -274,47 +280,42 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Widget _returnZoneInput() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          shape: BoxShape.rectangle,
-          border: Border.all(width: 1.0, color: Colors.grey)),
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Colors.amber, width: 5, style: BorderStyle.solid)),
-          enabledBorder: InputBorder.none,
-        ),
-        dropdownColor: Color.fromARGB(255, 244, 244, 244),
-        hint: Text('Zone'),
-        items: <String>[
-          'Mechi',
-          'Koshi',
-          'Sagarmatha',
-          'Janakpur',
-          'Bagmati',
-          'Narayani',
-          'Gandaki',
-          'Lumbini',
-          'Dhawalagiri',
-          'Rapti',
-          'Karnali',
-          'Bheri',
-          'Seti',
-          'Mahakali'
-        ].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (value) {
-          BlocProvider.of<UserdetailsBloc>(context)
-              .add(ReturnZoneChanged(returnZone: value));
-        },
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.amber, width: 5, style: BorderStyle.solid)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 1, color: Colors.grey)),
       ),
+      dropdownColor: Color.fromARGB(255, 244, 244, 244),
+      hint: Text('Zone'),
+      items: <String>[
+        'Mechi',
+        'Koshi',
+        'Sagarmatha',
+        'Janakpur',
+        'Bagmati',
+        'Narayani',
+        'Gandaki',
+        'Lumbini',
+        'Dhawalagiri',
+        'Rapti',
+        'Karnali',
+        'Bheri',
+        'Seti',
+        'Mahakali'
+      ].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      validator: (value) => value ?? "Zone not selected",
+      onChanged: (value) {
+        BlocProvider.of<UserdetailsBloc>(context)
+            .add(ReturnZoneChanged(returnZone: value));
+      },
     );
   }
 
@@ -328,6 +329,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5.0))),
             hintText: 'Province'),
+        validator: (value) =>
+            _validator.isValidName(value) ? null : 'Province is too short',
         onChanged: (value) => {
           BlocProvider.of<UserdetailsBloc>(context)
               .add(ReturnProvinceChanged(returnProvince: value))
@@ -422,6 +425,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
+  Widget _warehouseAddressBlock() {
+    return Column(
+      children: [_addressInput(), _zoneInput(), _provinceInput()],
+    );
+  }
+
   Widget _buissnessAddressBlock() {
     return _isBuissnessAddressSame
         ? Padding(padding: EdgeInsets.fromLTRB(0, defaultSmallPads, 0, 0))
@@ -451,7 +460,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
       padding: EdgeInsets.symmetric(vertical: defaultPads),
       child: TextButton(
         onPressed: () {
-          widget.movePageForward();
+          if (_formKey.currentState.validate()) {
+            widget.movePageForward();
+          }
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(

@@ -29,15 +29,15 @@ class RegisterLocation extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Container(
-        alignment: AlignmentDirectional.topStart,
-        padding: EdgeInsets.fromLTRB(defaultPads, 70, defaultPads, 0),
+        alignment: AlignmentDirectional.bottomStart,
+        padding: EdgeInsets.fromLTRB(defaultPads, 0, defaultPads, 0),
         child: Text(
-          "Create an account \nas",
+          "Create an account as",
           textAlign: TextAlign.left,
           style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
-              fontSize: 32,
+              fontSize: 36,
               color: Color.fromARGB(255, 255, 146, 19)),
         ),
       ),

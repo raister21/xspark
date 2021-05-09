@@ -6,7 +6,7 @@ class Validator {
   }
 
   bool isValidName(String name) {
-    if (name.length < 2) {
+    if (name != null && name.length < 2) {
       return false;
     }
     return RegExp(r"^(?![\s.]+$)[a-zA-Z\s.]*$").hasMatch(name);

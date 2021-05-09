@@ -195,8 +195,8 @@ class _RegisterPageState extends State<RegisterPage> {
               maxLength: 16,
               decoration: InputDecoration(
                   counterText: "",
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green, width: 2)),
+                  // focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Colors.green, width: 2)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   hintText: 'Owner Name'),
@@ -222,8 +222,8 @@ class _RegisterPageState extends State<RegisterPage> {
               maxLength: 16,
               decoration: InputDecoration(
                   counterText: "",
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green, width: 2)),
+                  // focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Colors.green, width: 2)),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red),
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -251,8 +251,8 @@ class _RegisterPageState extends State<RegisterPage> {
               maxLength: 25,
               decoration: InputDecoration(
                   counterText: "",
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green, width: 2)),
+                  // focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Colors.green, width: 2)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   hintText: 'Email'),
@@ -278,8 +278,8 @@ class _RegisterPageState extends State<RegisterPage> {
               maxLength: 10,
               decoration: InputDecoration(
                   counterText: "",
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green, width: 2)),
+                  // focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Colors.green, width: 2)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   hintText: 'Mobile number'),
@@ -309,8 +309,8 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: isPasswordHidden,
               decoration: InputDecoration(
                   counterText: "",
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green, width: 2)),
+                  // focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Colors.green, width: 2)),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red),
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
