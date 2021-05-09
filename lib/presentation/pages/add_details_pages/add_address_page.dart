@@ -367,12 +367,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                               state.warehouseProvince != null)
                             {
                               _buisnessSetAsSame(changed),
-                              BlocProvider.of<UserdetailsBloc>(context).add(
-                                  BuisnessDetailsSameAsWarehouseClicked(
-                                      buisnessAddress: state.warehouseAddress,
-                                      buisnessZone: state.warehouseZone,
-                                      buisnessProvince:
-                                          state.warehouseProvince))
                             }
                           else
                             {_warehouseFormKey.currentState.validate()}
@@ -418,11 +412,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                               state.warehouseProvince != null)
                             {
                               _returnSetAsSame(changed),
-                              BlocProvider.of<UserdetailsBloc>(context).add(
-                                  ReturnDetailsSameAsWarehouseClicked(
-                                      returnAddress: state.warehouseAddress,
-                                      returnZone: state.warehouseZone,
-                                      returnProvince: state.warehouseProvince))
                             }
                           else
                             {_warehouseFormKey.currentState.validate()}
@@ -482,25 +471,43 @@ class _AddAddressPageState extends State<AddAddressPage> {
   Widget _proceedButton() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: defaultPads),
-      child: TextButton(
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            if (_warehouseFormKey.currentState.validate()) {
-              widget.movePageForward();
-            }
-          }
+      child: BlocBuilder<UserdetailsBloc, UserdetailsState>(
+        builder: (context, state) {
+          return TextButton(
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                if (_warehouseFormKey.currentState.validate()) {
+                  if (_isReturnAddressSame == true) {
+                    BlocProvider.of<UserdetailsBloc>(context).add(
+                        ReturnDetailsSameAsWarehouseClicked(
+                            returnAddress: state.warehouseAddress,
+                            returnZone: state.warehouseZone,
+                            returnProvince: state.warehouseProvince));
+                  }
+                  if (_isBuissnessAddressSame == true) {
+                    BlocProvider.of<UserdetailsBloc>(context).add(
+                        BuisnessDetailsSameAsWarehouseClicked(
+                            buisnessAddress: state.warehouseAddress,
+                            buisnessZone: state.warehouseZone,
+                            buisnessProvince: state.warehouseProvince));
+                  }
+                  widget.movePageForward();
+                }
+              }
+            },
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromARGB(255, 255, 146, 19)),
+                minimumSize: MaterialStateProperty.all(
+                  Size(MediaQuery.of(context).size.width, 48),
+                )),
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  color: Colors.white, fontFamily: 'Poppins', fontSize: 14),
+            ),
+          );
         },
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-                Color.fromARGB(255, 255, 146, 19)),
-            minimumSize: MaterialStateProperty.all(
-              Size(MediaQuery.of(context).size.width, 48),
-            )),
-        child: Text(
-          "Next",
-          style: TextStyle(
-              color: Colors.white, fontFamily: 'Poppins', fontSize: 14),
-        ),
       ),
     );
   }
